@@ -6,7 +6,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'onneq'
+rootProject.name = 'bancolombiaTest'
 
 include ':app-service'
 include ':model'
