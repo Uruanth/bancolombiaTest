@@ -5,6 +5,7 @@ import co.com.onneq.model.user.User;
 import co.com.onneq.model.user.gateways.UserRepository;
 import co.com.onneq.r2dbc.helper.ReactiveAdapterOperations;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -29,6 +30,17 @@ public class UserDataAdapter extends ReactiveAdapterOperations<User, UserData, I
                 .map(this::toData)
                 .flatMap(repository::insertUser)
                 .then(Mono.just(user));
+    }
+
+    @Override
+    public Flux<User> getByName(String name) {
+        return repository.findAllByName(name)
+                .map(this::toEntity);
+    }
+
+    @Override
+    public Flux<User> getAll() {
+        return this.findAll();
     }
 
 

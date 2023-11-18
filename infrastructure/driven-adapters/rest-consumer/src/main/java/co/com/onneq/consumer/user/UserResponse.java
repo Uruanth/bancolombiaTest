@@ -19,9 +19,9 @@ public class UserResponse {
     @AllArgsConstructor
     @NoArgsConstructor
     public class UserData{
-        private Long id;
+        private Integer id;
         private String email;
-        private String firts_name;
+        private String first_name;
         private String last_name;
         private String avatar;
     }
