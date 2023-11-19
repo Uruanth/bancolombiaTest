@@ -18,5 +18,4 @@ public class ObjectMapperConfig {
     public UserMapper userMapper(){
         return new UserMapper();
     }
-
 }

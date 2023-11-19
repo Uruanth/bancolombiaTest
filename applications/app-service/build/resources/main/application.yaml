@@ -7,10 +7,15 @@ spring:
     add-properties: false
   h2:
     console:
-      enabled: true
+      enabled: false
       path: "/h2"
   profiles:
     include: null
+  data:
+    redis:
+      host: "localhost"
+      port: 6379
+      password: passredis
 management:
   endpoints:
     web:

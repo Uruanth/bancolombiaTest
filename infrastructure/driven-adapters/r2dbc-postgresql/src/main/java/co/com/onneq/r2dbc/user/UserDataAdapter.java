@@ -4,9 +4,12 @@ import co.com.onneq.Error.UserError;
 import co.com.onneq.model.user.User;
 import co.com.onneq.model.user.gateways.UserRepository;
 import co.com.onneq.r2dbc.helper.ReactiveAdapterOperations;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.time.Duration;
 
 @Service
 public class UserDataAdapter extends ReactiveAdapterOperations<User, UserData, Integer, UserDataRepository>
