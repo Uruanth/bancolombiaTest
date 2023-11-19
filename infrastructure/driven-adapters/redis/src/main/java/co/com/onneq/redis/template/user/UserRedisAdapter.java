@@ -3,21 +3,28 @@ package co.com.onneq.redis.template.user;
 import co.com.onneq.model.user.User;
 import co.com.onneq.model.user.gateways.UserCacheRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.ReactiveRedisOperations;
+import lombok.extern.java.Log;
+import org.springframework.data.redis.core.ReactiveHashOperations;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+@Log
 @Service
 @RequiredArgsConstructor
 public class UserRedisAdapter implements UserCacheRepository {
 
-    private final ReactiveRedisOperations<String, UserRedis> reactiveRedisOperations;
+    private final ReactiveHashOperations<String, Integer, UserRedis> reactiveRedisOperations;
 
 
     @Override
     public Flux<User> getAll() {
-        return reactiveRedisOperations.opsForList().range("users", 0, -1)
+
+        return reactiveRedisOperations.values("users")
+                .map(userRedis -> {
+                    System.out.println("userRedis = " + userRedis);
+                    return userRedis;
+                })
                 .map(userRedis -> User.builder()
                         .id(userRedis.getUserId())
                         .lastName(userRedis.getLastName())
@@ -26,17 +33,34 @@ public class UserRedisAdapter implements UserCacheRepository {
     }
 
     @Override
-    public Mono<Long> save(User user){
+    public Mono<User> getById(Integer id) {
+        return reactiveRedisOperations
+                .get("users", id)
+                .map(userRedis -> {
+                    System.out.println("userRedis = " + userRedis);
+                    return userRedis;
+                })
+                .map(userRedis -> User.builder()
+                        .id(userRedis.getUserId())
+                        .lastName(userRedis.getLastName())
+                        .name(userRedis.getName())
+                        .build());
+    }
+
+    @Override
+    public Mono<Long> save(User user) {
         var uRedis = UserRedis.builder()
                 .userId(user.getId())
                 .lastName(user.getLastName())
                 .name(user.getName())
                 .build();
-        return this.reactiveRedisOperations.opsForList().rightPush("users", uRedis);
+        return this.reactiveRedisOperations.put("users", user.getId(), uRedis)
+                .map(aBoolean -> 1l);
     }
 
     @Override
     public Mono<Boolean> deleteAll() {
-        return reactiveRedisOperations.opsForList().delete("users");
+        return reactiveRedisOperations.
+                delete("users");
     }
 }

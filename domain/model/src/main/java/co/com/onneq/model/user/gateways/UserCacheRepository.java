@@ -6,6 +6,7 @@ import reactor.core.publisher.Mono;
 
 public interface UserCacheRepository {
     Flux<User> getAll();
+    Mono<User> getById(Integer id);
     Mono<Long> save(User user);
 
     Mono<Boolean> deleteAll();

@@ -18,6 +18,7 @@ public class UserUseCase {
 
     public Mono<User> getById(String idString) {
         var id = Integer.valueOf(idString);
+        userCacheRepository.getById(id).subscribe();
         return userRepository.getById(id);
     }
 
