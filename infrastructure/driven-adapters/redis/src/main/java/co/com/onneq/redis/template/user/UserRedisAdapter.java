@@ -21,10 +21,6 @@ public class UserRedisAdapter implements UserCacheRepository {
     public Flux<User> getAll() {
 
         return reactiveRedisOperations.values("users")
-                .map(userRedis -> {
-                    System.out.println("userRedis = " + userRedis);
-                    return userRedis;
-                })
                 .map(userRedis -> User.builder()
                         .id(userRedis.getUserId())
                         .lastName(userRedis.getLastName())
@@ -36,10 +32,6 @@ public class UserRedisAdapter implements UserCacheRepository {
     public Mono<User> getById(Integer id) {
         return reactiveRedisOperations
                 .get("users", id)
-                .map(userRedis -> {
-                    System.out.println("userRedis = " + userRedis);
-                    return userRedis;
-                })
                 .map(userRedis -> User.builder()
                         .id(userRedis.getUserId())
                         .lastName(userRedis.getLastName())

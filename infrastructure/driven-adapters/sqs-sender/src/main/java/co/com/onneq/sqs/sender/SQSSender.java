@@ -1,6 +1,6 @@
 package co.com.onneq.sqs.sender;
 
-import co.com.onneq.model.user.gateways.UserBrokerRepository;
+import co.com.onneq.model.user.gateways.UserPublisherRepository;
 import co.com.onneq.sqs.sender.config.SQSSenderProperties;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -13,7 +13,7 @@ import software.amazon.awssdk.services.sqs.model.SendMessageResponse;
 @Service
 @Log4j2
 @AllArgsConstructor
-public class SQSSender implements UserBrokerRepository {
+public class SQSSender implements UserPublisherRepository {
     private final SQSSenderProperties properties;
     private final SqsAsyncClient client;
 

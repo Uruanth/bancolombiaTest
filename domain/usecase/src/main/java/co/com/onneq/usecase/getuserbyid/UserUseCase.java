@@ -1,12 +1,10 @@
 package co.com.onneq.usecase.getuserbyid;
 
 import co.com.onneq.model.user.User;
-import co.com.onneq.model.user.gateways.UserBrokerRepository;
+import co.com.onneq.model.user.gateways.UserPublisherRepository;
 import co.com.onneq.model.user.gateways.UserCacheRepository;
 import co.com.onneq.model.user.gateways.UserRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
-import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -16,13 +14,13 @@ public class UserUseCase {
 
     private final UserRepository userRepository;
     private final UserCacheRepository userCacheRepository;
-    private final UserBrokerRepository userBrokerRepository;
+    private final UserPublisherRepository userPublisherRepository;
 
     public Mono<User> getById(String idString) {
         var id = Integer.valueOf(idString);
         userCacheRepository.getById(id).subscribe();
-        return userBrokerRepository.sendUserId(idString)
-                .map(Integer::valueOf)
+        return userPublisherRepository.sendUserId(idString)
+                .map(s -> id)
                 .flatMap(userRepository::getById);
     }
 
